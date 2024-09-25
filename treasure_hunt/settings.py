@@ -31,8 +31,12 @@ ALLOWED_HOSTS = ['192.168.1.120', 'http://oradea.artorius.uk', 'https://oradea.a
 CSRF_TRUSTED_ORIGINS = [
     'https://oradea.artorius.uk',
     'http://oradea.artorius.uk',
-    '192.168.1.120'
+    'http://192.168.1.120'
 ]
+
+# Secure cookies
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 # Application definition
 
