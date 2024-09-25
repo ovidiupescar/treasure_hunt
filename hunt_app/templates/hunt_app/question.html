@@ -42,8 +42,7 @@
                                     {% if question.question_type == 'dropdown' %}
                                     <select name="answer">
                                         {% for option in options %}
-                                        <option value="{{ option }}" {% if answer and answer.answer_text==option
-                                            %}selected{% endif %}>{{ option }}</option>
+                                        <option value="{{ option }}" {% if answer and answer.answer_text == option %}selected{% endif %}>{{ option }}</option>
                                         {% endfor %}
                                     </select>
                                     {% else %}
