@@ -28,6 +28,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['192.168.1.120', 'http://oradea.artorius.uk', 'https://oradea.artorius.uk', 'oradea.artorius.uk']
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://oradea.artorius.uk',
+    'http://oradea.artorius.uk',
+    '192.168.1.120'
+]
 
 # Application definition
 
