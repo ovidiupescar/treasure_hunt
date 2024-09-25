@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  web:
+    image: fenadmin/treasure-hunt:latest
+    ports:
+      - "1180:8000"
+      - "1122:22"
+    networks:
+      - fennet
+networks:
+  fennet:
+    external: true

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirm Clear Data</title>
+</head>
+<body>
+    <h1>Are you sure you want to clear all data?</h1>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Yes, clear all data</button>
+    </form>
+    <a href="{% url 'admin_dashboard' %}">Cancel</a>
+</body>
+</html>
