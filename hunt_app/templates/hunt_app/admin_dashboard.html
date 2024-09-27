@@ -33,10 +33,60 @@
         </tr>
         {% endfor %}
     </table>
+    <!-- Chart Container -->
+    <div class="mb-5">
+        <canvas id="pointsChart"></canvas>
+    </div>
     <form action="{% url 'clear_data' %}" method="post">
         {% csrf_token %}
         <button type="submit">Clear All Data</button>
     </form>
 </body>
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    var chartData = {{ chart_data|safe }};
+    var ctx = document.getElementById('pointsChart').getContext('2d');
+    var pointsChart = new Chart(ctx, {
+        type: 'line',
+        data: chartData,
+        options: {
+            responsive: true,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            stacked: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Points Acquisition Over Time'
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                },
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Time (HH:MM)'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Cumulative Points'
+                    },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
 </html>
 
