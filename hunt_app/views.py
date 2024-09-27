@@ -99,10 +99,10 @@ def reset_questions(request):
 
             for index, row in df.iterrows():
                 if row['text']:
-                    q_type = 'Text'
+                    q_type = 'text'
                     opt = ''
                 else:
-                    q_type = 'Dropdown'
+                    q_type = 'dropdown'
                     opt = row['options']
                 Question.objects.create(
                     question_location = row['Statie'].strip(),
