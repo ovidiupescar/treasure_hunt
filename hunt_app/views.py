@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Group, Question, Answer
 from django.utils import timezone
+import pytz
 from django.db.models import Sum
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
@@ -133,6 +134,10 @@ def reset_questions(request):
 
 @staff_member_required
 def admin_dashboard(request):
+    
+    # Get the Bucharest timezone
+    bucharest_tz = pytz.timezone('Europe/Bucharest')
+
     groups = Group.objects.order_by('-total_points')
     
     # Retrieve all answers
@@ -140,11 +145,11 @@ def admin_dashboard(request):
     
     if all_answers.exists():
         # Get event start and end times from the data
-        event_start_time = all_answers.first().timestamp.replace(second=0, microsecond=0)
-        event_end_time = all_answers.last().timestamp.replace(second=0, microsecond=0)
+        event_start_time = all_answers.first().timestamp.astimezone(bucharest_tz).replace(second=0, microsecond=0)
+        event_end_time = all_answers.last().timestamp.astimezone(bucharest_tz).replace(second=0, microsecond=0)
     else:
         # If no answers yet, use current time as start and end time
-        event_start_time = timezone.now().replace(second=0, microsecond=0)
+        event_start_time = timezone.now().astimezone(bucharest_tz).replace(second=0, microsecond=0)
         event_end_time = event_start_time
 
     # Create time intervals at 1-minute increments
@@ -175,7 +180,7 @@ def admin_dashboard(request):
             )
             # Add points for answers up to the current time_point
             while (answer_index < num_answers and
-                   answers[answer_index].timestamp.replace(second=0, microsecond=0) <= time_point):
+                   answers[answer_index].timestamp.astimezone(bucharest_tz).replace(second=0, microsecond=0) <= time_point):
                 total_answers += 1
                 answer_index += 1
             cumulative_answers.append(total_answers)
