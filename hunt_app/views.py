@@ -77,7 +77,7 @@ def clear_data(request):
     return render(request, 'hunt_app/clear_data.html')
 
 def success_page(request):
-    return render(request, 'success.html')
+    return render(request, 'hunt_app/success.html')
 
 @staff_member_required
 def reset_questions(request):
