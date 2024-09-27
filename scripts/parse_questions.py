@@ -6,7 +6,7 @@ def calculate_options(row):
     if not row['text']:
         options = [row['Raspuns Corect'].strip(), row['Optiune 1'].strip(), row['Optiune 2'].strip()]
         random.shuffle(options)
-        options_text = f"['{options[0]}', '{options[1]}', '{options[2]}']"
+        options_text = f'["{options[0]}", "{options[1]}", "{options[2]}"]'
     else:
         options_text = None
     return options_text
