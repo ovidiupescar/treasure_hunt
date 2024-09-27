@@ -1,3 +1,5 @@
 venv/
 hunt_app/__pycache__/*.pyc
 *.pyc
+scripts/scr/
+scripts/generate/

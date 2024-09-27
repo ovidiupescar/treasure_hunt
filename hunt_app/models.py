@@ -2,7 +2,7 @@ from django.db import models
 
 class Group(models.Model):
     group_number = models.IntegerField(primary_key=True)
-    group_name = models.TextField(default='')
+    group_name = models.TextField(null=True)
     licu = models.BooleanField(default=False)
     total_points = models.IntegerField(default=0)
     answers_provided = models.IntegerField(default=0)
