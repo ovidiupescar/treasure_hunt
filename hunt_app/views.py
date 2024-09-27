@@ -111,4 +111,4 @@ def reset_questions(request):
             return redirect('admin_dashboard')
 
     # GET request - show confirmation page
-    return render(request, 'reset_questions_confirmation.html')
+    return render(request, 'hunt_app/reset_questions_confirmation.html')
