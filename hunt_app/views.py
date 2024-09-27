@@ -4,8 +4,10 @@ from django.utils import timezone
 from django.db.models import Sum
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
+from django.conf import settings  # To access project settings
 import pandas as pd
 import json
+import os
 
 def question_view(request):
     group_number = request.GET.get('group_number')
@@ -84,8 +86,16 @@ def reset_questions(request):
         if 'confirm' in request.POST:
             # Clear existing questions
             Question.objects.all().delete()
+            
+            # Load the pickle file from the correct path
+            pickle_file_path = os.path.join(settings.BASE_DIR, 'hunt_app', 'data', 'intrebari.pkl')
 
-            df = pd.read_pickle('intrebari.pkl')
+            df = pd.read_pickle(pickle_file_path)
+
+            try:
+                df = pd.read_pickle(pickle_file_path)
+            except FileNotFoundError:
+                return render(request, 'error.html', {'message': 'Pickle file not found!'})
 
             for index, row in df.iterrows():
                 if row['text']:
