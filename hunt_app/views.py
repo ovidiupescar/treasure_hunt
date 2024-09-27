@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.db.models import Sum
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
+import pandas as pd
 import json
 
 def question_view(request):
@@ -72,3 +73,42 @@ def clear_data(request):
         Group.objects.update(total_points=0, answers_provided=0, completion_order=None)
         return redirect('admin_dashboard')
     return render(request, 'hunt_app/clear_data.html')
+
+def success_page(request):
+    return render(request, 'success.html')
+
+@staff_member_required
+def reset_questions(request):
+    if request.method == 'POST':  # This handles the confirmation
+        # If user confirms to reset, do the actual reset
+        if 'confirm' in request.POST:
+            # Clear existing questions
+            Question.objects.all().delete()
+
+            df = pd.read_pickle('intrebari.pkl')
+
+            for index, row in df.iterrows():
+                if row['text']:
+                    q_type = 'Text'
+                    opt = ''
+                else:
+                    q_type = 'Dropdown'
+                    opt = row['options']
+                Question.objects.create(
+                    question_location = row['Statie'].strip(),
+                    question_text = row['Intrebare'].strip(),
+                    question_type = q_type,
+                    options = opt,
+                    correct_answer = row['Raspuns Corect'].strip(),
+                    points = 10
+                )
+
+            # Redirect to a success page after reset
+            return redirect('success_page')
+
+        else:
+            # If user cancels, redirect to some other page (e.g., the home page)
+            return redirect('admin_dashboard')
+
+    # GET request - show confirmation page
+    return render(request, 'reset_questions_confirmation.html')

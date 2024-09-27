@@ -1,0 +1,17 @@
+<!-- templates/reset_questions_confirmation.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirm Reset</title>
+</head>
+<body>
+    <h2>Are you sure you want to reset all questions?</h2>
+    <p>This action cannot be undone.</p>
+    
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" name="confirm" value="yes">Yes, Reset Questions</button>
+        <button type="submit" name="cancel" value="no">No, Take Me Back</button>
+    </form>
+</body>
+</html>

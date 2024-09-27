@@ -3,6 +3,7 @@ from django.db import models
 class Group(models.Model):
     group_number = models.IntegerField(primary_key=True)
     group_name = models.TextField(default='')
+    licu = models.BooleanField(default=False)
     total_points = models.IntegerField(default=0)
     answers_provided = models.IntegerField(default=0)
     completion_order = models.IntegerField(null=True, blank=True)
@@ -22,7 +23,8 @@ class Question(models.Model):
     question_type = models.CharField(max_length=10, choices=QUESTION_TYPES)
     options = models.TextField(blank=True, null=True)  # JSON string if dropdown
     correct_answer = models.TextField()
-    points = models.IntegerField(default=1)
+    points = models.IntegerField(default=10)
+    licu = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Question {self.question_number}"
