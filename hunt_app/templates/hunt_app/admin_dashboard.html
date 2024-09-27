@@ -35,7 +35,7 @@
     </table>
     <!-- Chart Container -->
     <div class="mb-5">
-        <canvas id="pointsChart"></canvas>
+        <canvas id="answersChart"></canvas>
     </div>
     <form action="{% url 'clear_data' %}" method="post">
         {% csrf_token %}
@@ -48,7 +48,7 @@
 
 <script>
     var chartData = {{ chart_data|safe }};
-    var ctx = document.getElementById('pointsChart').getContext('2d');
+    var ctx = document.getElementById('answersChart').getContext('2d');
     var pointsChart = new Chart(ctx, {
         type: 'line',
         data: chartData,
@@ -62,7 +62,7 @@
             plugins: {
                 title: {
                     display: true,
-                    text: 'Points Acquisition Over Time'
+                    text: 'Raspunsuri'
                 },
                 tooltip: {
                     mode: 'index',
@@ -79,7 +79,7 @@
                 y: {
                     title: {
                         display: true,
-                        text: 'Cumulative Points'
+                        text: 'Raspunsuri'
                     },
                     beginAtZero: true
                 }

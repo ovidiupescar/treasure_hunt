@@ -158,8 +158,8 @@ def admin_dashboard(request):
     group_data = {}
     for group in groups:
         # Initialize cumulative points list
-        cumulative_points = []
-        total_points = 0
+        cumulative_answers = []
+        total_answers  = 0
         # Get all answers for the group, ordered by timestamp
         answers = Answer.objects.filter(group=group).order_by('timestamp')
         answer_index = 0
@@ -176,10 +176,10 @@ def admin_dashboard(request):
             # Add points for answers up to the current time_point
             while (answer_index < num_answers and
                    answers[answer_index].timestamp.replace(second=0, microsecond=0) <= time_point):
-                total_points += answers[answer_index].points_earned
+                total_answers += 1
                 answer_index += 1
-            cumulative_points.append(total_points)
-        group_data[group.group_number] = cumulative_points
+            cumulative_answers.append(total_answers)
+        group_data[group.group_number] = cumulative_answers
     
     # Prepare data for Chart.js
     chart_data = {
@@ -192,10 +192,10 @@ def admin_dashboard(request):
     def get_random_color():
         return f'rgba({random.randint(0,255)}, {random.randint(0,255)}, {random.randint(0,255)}, 1)'
     
-    for group_number, points in group_data.items():
+    for group_number, answers in group_data.items():
         dataset = {
             'label': f'Group {group_number}',
-            'data': points,
+            'data': answers,
             'fill': False,
             'borderColor': get_random_color(),
             'tension': 0.1
