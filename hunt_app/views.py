@@ -212,3 +212,6 @@ def admin_dashboard(request):
         'chart_data': json.dumps(chart_data),
     }
     return render(request, 'hunt_app/admin_dashboard.html', context)
+
+def home_view(request):
+    return render(request, 'hunt_app/home.html')

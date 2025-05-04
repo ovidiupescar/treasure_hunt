@@ -42,5 +42,7 @@ jobs:
       run: |
         PORTAINER_API_KEY=$(curl -s -X POST "${{ secrets.PORTAINER_URL }}/api/auth" -H "Content-Type: application/json" -d '{"username": "${{ secrets.PORTAINER_USERNAME }}", "password": "${{ secrets.PORTAINER_PASSWORD }}"}' | jq -r .jwt)
 
-        curl -X POST "${{ secrets.PORTAINER_URL }}/api/stacks/webhooks/87e6c17e-acf8-4791-8afc-d56c228ce6de" \
+        # Replace YOUR_NEW_WEBHOOK_ID with the ID from your Portainer stack webhook
+        # This ID is found in the Stack details > Webhooks section after creating a webhook
+        curl -X POST "${{ secrets.PORTAINER_URL }}/api/stacks/webhooks/ae74c3f1-227d-45a1-8366-0c8fb0d3773d" \
         -H "Authorization: Bearer $PORTAINER_API_KEY"
