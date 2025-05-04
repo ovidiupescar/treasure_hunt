@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Group, Question, Answer
 from django.utils import timezone
 import pytz
-from django.db.models import Sum
+from django.db.models import Sum, Max, Count
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
 from django.conf import settings  # To access project settings
@@ -11,6 +11,35 @@ import pandas as pd
 import json
 import os
 import unicodedata
+
+def check_completion(group):
+    """
+    Check if a group has answered all questions and set completion_order if they have.
+    Awards bonus points based on finishing order.
+    """
+    # Count total number of questions in the system
+    total_questions = Question.objects.count()
+    
+    # Count how many unique questions this group has answered
+    answered_questions = Answer.objects.filter(group=group).values('question').distinct().count()
+    
+    # If they've answered all questions and don't already have a completion order
+    if answered_questions >= total_questions and group.completion_order is None:
+        # Find the highest current completion order
+        max_order = Group.objects.aggregate(Max('completion_order'))['completion_order__max'] or 0
+        # Set this group's completion order to the next number
+        new_order = max_order + 1
+        group.completion_order = new_order
+        
+        # Award bonus points based on finishing order
+        # First place gets 75 points, then decreases by 15 points for each position
+        # With a minimum of 15 points for finishing
+        bonus_points = max(75 - ((new_order - 1) * 15), 15)
+        group.total_points += bonus_points
+        
+        group.save()
+        
+    return group.completion_order is not None
 
 def question_view(request):
     def remove_diacritics(text: str) -> str:
@@ -67,6 +96,9 @@ def question_view(request):
 
         group.total_points += points_earned
         group.save()
+        
+        # Check if the group has completed all questions
+        has_completed = check_completion(group)
 
         return redirect(request.path + f'?group_number={group_number}&question_number={question_number}')
 
@@ -214,6 +246,23 @@ def admin_dashboard(request):
         'chart_data': json.dumps(chart_data),
     }
     return render(request, 'hunt_app/admin_dashboard.html', context)
+
+@staff_member_required
+def group_detail(request, group_number):
+    """View to show all answers from a specific group."""
+    group = get_object_or_404(Group, group_number=group_number)
+    answers = Answer.objects.filter(group=group).order_by('question__question_number')
+    
+    # Get questions that haven't been answered
+    answered_question_ids = answers.values_list('question__question_number', flat=True)
+    unanswered_questions = Question.objects.exclude(question_number__in=answered_question_ids).order_by('question_number')
+    
+    context = {
+        'group': group,
+        'answers': answers,
+        'unanswered_questions': unanswered_questions
+    }
+    return render(request, 'hunt_app/group_detail.html', context)
 
 def home_view(request):
     return render(request, 'hunt_app/home.html')

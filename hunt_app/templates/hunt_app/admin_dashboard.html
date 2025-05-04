@@ -17,21 +17,29 @@
   crossorigin="anonymous">
 </script>
     <h1>Admin Dashboard</h1>
-    <table border="1">
-        <tr>
-            <th>Group Number</th>
-            <th>Total Points</th>
-            <th>Answers Provided</th>
-            <th>Completion Order</th>
-        </tr>
-        {% for group in groups %}
-        <tr>
-            <td>{{ group.group_number }}</td>
-            <td>{{ group.total_points }}</td>
-            <td>{{ group.answers_provided }}</td>
-            <td>{{ group.completion_order|default:"N/A" }}</td>
-        </tr>
-        {% endfor %}
+    <table border="1" class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Group Number</th>
+                <th>Total Points</th>
+                <th>Answers Provided</th>
+                <th>Completion Order</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for group in groups %}
+            <tr>
+                <td>{{ group.group_number }}</td>
+                <td>{{ group.total_points }}</td>
+                <td>{{ group.answers_provided }}</td>
+                <td>{{ group.completion_order|default:"N/A" }}</td>
+                <td>
+                    <a href="{% url 'group_detail' group.group_number %}" class="btn btn-primary btn-sm">View Details</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
     <!-- Chart Container -->
     <div class="mb-5">
