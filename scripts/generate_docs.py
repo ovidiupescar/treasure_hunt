@@ -129,5 +129,5 @@ def get_links():
 
     return result_licu, result_explo
 
-print(get_links())
+get_links()
 #main()
