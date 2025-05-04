@@ -20,6 +20,8 @@ def question_view(request):
         )
 
     def check_answer(received, correct):
+        if received == '':
+            return False
         received_words = set(remove_diacritics(received).split())
         correct_words = set(remove_diacritics(correct).split())
 
