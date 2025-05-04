@@ -9,4 +9,5 @@ urlpatterns = [
     path('clear_data/', views.clear_data, name='clear_data'),
     path('reset_questions/', views.reset_questions, name='reset_questions'),
     path('success/', views.success_page, name='success_page'),
+    path('manage_groups/', views.manage_group_names, name='manage_group_names'),
 ]

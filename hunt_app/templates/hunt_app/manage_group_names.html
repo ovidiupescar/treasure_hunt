@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Group Names</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      integrity="sha384-..."
+      crossorigin="anonymous"
+    />
+    <style>
+        .group-section {
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-4">
+        <h1 class="mb-4">Manage Group Names</h1>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary mb-4">Back to Dashboard</a>
+        
+        <!-- Licu Groups Section -->
+        <div class="group-section">
+            <h2 class="mb-3">Licu Groups</h2>
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                {% for group in licu_groups %}
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            Group {{ group.group_number }}
+                        </div>
+                        <div class="card-body">
+                            <form method="post" class="row g-3">
+                                {% csrf_token %}
+                                <input type="hidden" name="group_id" value="{{ group.group_number }}">
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="group_name" value="{{ group.group_name|default:'' }}" placeholder="Enter group name">
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-primary w-100">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-footer text-muted">
+                            Points: {{ group.total_points }} | Answers: {{ group.answers_provided }}
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info">No Licu groups found.</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Explo Groups Section -->
+        <div class="group-section">
+            <h2 class="mb-3">Explo Groups</h2>
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                {% for group in explo_groups %}
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            Group {{ group.group_number }}
+                        </div>
+                        <div class="card-body">
+                            <form method="post" class="row g-3">
+                                {% csrf_token %}
+                                <input type="hidden" name="group_id" value="{{ group.group_number }}">
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="group_name" value="{{ group.group_name|default:'' }}" placeholder="Enter group name">
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-success w-100">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-footer text-muted">
+                            Points: {{ group.total_points }} | Answers: {{ group.answers_provided }}
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info">No Explo groups found.</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
